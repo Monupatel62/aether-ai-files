@@ -1,6 +1,6 @@
 # Repository specification: aether-ai-files
 
-**Status:** Documentation baseline copied from the Aether AI master specification. Implementation status must be verified separately.
+**Status:** Repository exists; documentation-only on the inspected `main` branch. No application implementation is present in the audited tree.
 
 ## Mission
 
@@ -8,7 +8,7 @@ Secure upload validation, metadata, storage abstraction, download authorization,
 
 ## Dependencies and connections
 
-API, database, security, observability.
+aether-ai-database, aether-ai-security, and aether-ai-observability.
 
 ## Owned capabilities
 
