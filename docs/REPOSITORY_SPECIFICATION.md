@@ -43,14 +43,14 @@ Unit tests, contract tests, authorization/tenant isolation tests, malformed-inpu
 ## Implementation gates
 
 1. Create the repository only when the owner and direct dependencies are ready.
-2. Review this specification against [the master catalog](../REPOSITORY_CATALOG.md).
+2. Review this specification against [the master catalog](https://github.com/Monupatel62/aether-ai-platform/blob/main/docs/REPOSITORY_CATALOG.md).
 3. Record an ADR for unresolved technology choices before selecting a database, identity provider, queue, cache, vector store, or payment provider.
 4. Implement a minimal vertical slice with tests and operational docs.
 5. Update the master catalog and this spec when the contract changes.
 
 ## Research references
 
-- [Aether AI master catalog](../REPOSITORY_CATALOG.md)
+- [Aether AI master catalog](https://github.com/Monupatel62/aether-ai-platform/blob/main/docs/REPOSITORY_CATALOG.md)
 - [WoHo AI DevKit](https://github.com/Monupatel62/woho-ai-devkit) — separate dependency; verify exact package APIs and license.
 - [AI DIAL Core](https://github.com/epam/ai-dial-core) — model gateway reference; verify exact release/license before reuse.
 - [AI DIAL Chat](https://github.com/epam/ai-dial-chat) — UI/BFF reference; verify file-level notices before reuse.
@@ -58,13 +58,13 @@ Unit tests, contract tests, authorization/tenant isolation tests, malformed-inpu
 
 These links are research inputs, not proof that the Aether implementation exists or that all referenced code is reusable under one license.## Storage and indexing boundary
 
-See [Data Infrastructure Evaluation](../DATA_INFRASTRUCTURE_EVALUATION.md). File bytes should use a separately selected object-storage adapter; this evaluation does not choose a provider. The files domain owns file metadata, ownership, scanning status, retention/deletion and signed-access policy. Database metadata and search/vector indexes are distinct: index jobs should use versioned opaque IDs and be safely replayable. File deletion and access revocation must propagate to every derived index/cache, with tombstones/reconciliation to cover partial failures. Never put raw file bytes in queue messages or routine logs.
+See [Data Infrastructure Evaluation](https://github.com/Monupatel62/aether-ai-platform/blob/main/docs/DATA_INFRASTRUCTURE_EVALUATION.md). File bytes should use a separately selected object-storage adapter; this evaluation does not choose a provider. The files domain owns file metadata, ownership, scanning status, retention/deletion and signed-access policy. Database metadata and search/vector indexes are distinct: index jobs should use versioned opaque IDs and be safely replayable. File deletion and access revocation must propagate to every derived index/cache, with tombstones/reconciliation to cover partial failures. Never put raw file bytes in queue messages or routine logs.
 
 ## Related documentation
 
-- [Master repository catalog](../REPOSITORY_CATALOG.md)
-- [Master architecture](../MASTER_ARCHITECTURE.md)
-- [Architecture audit](../ARCHITECTURE_AUDIT.md)
-- [Security threat model](../SECURITY_THREAT_MODEL.md)
-- [Open decisions and research](../OPEN_DECISIONS_RESEARCH.md)
-- [Continuity handoff](../WORK_HANDOFF.md)
+- [Master repository catalog](https://github.com/Monupatel62/aether-ai-platform/blob/main/docs/REPOSITORY_CATALOG.md)
+- [Master architecture](https://github.com/Monupatel62/aether-ai-platform/blob/main/docs/MASTER_ARCHITECTURE.md)
+- [Architecture audit](https://github.com/Monupatel62/aether-ai-platform/blob/main/docs/ARCHITECTURE_AUDIT.md)
+- [Security threat model](https://github.com/Monupatel62/aether-ai-platform/blob/main/docs/SECURITY_THREAT_MODEL.md)
+- [Open decisions and research](https://github.com/Monupatel62/aether-ai-platform/blob/main/docs/OPEN_DECISIONS_RESEARCH.md)
+- [Continuity handoff](https://github.com/Monupatel62/aether-ai-platform/blob/main/docs/WORK_HANDOFF.md)
