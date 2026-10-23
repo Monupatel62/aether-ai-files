@@ -65,14 +65,24 @@ export function validateUploadBytes(
   if (bytes.byteLength > maxBytes) throw new RangeError("Upload exceeded the configured byte limit.");
 
   const { safeName, extension } = validateFileName(fileName);
+  if (typeof declaredContentType !== "string" || declaredContentType.length > 200) {
+    throw new TypeError("Declared content type is invalid.");
+  }
   const detectedContentType = detectKnownContentType(bytes);
   if (!detectedContentType) throw new TypeError("Unsupported or unrecognized file signature.");
   const declared = declaredContentType.split(";")[0]?.trim().toLowerCase();
   if (declared !== detectedContentType) throw new TypeError("Declared content type does not match the file signature.");
 
   const allowed = options.allowedTypes ?? DEFAULT_ALLOWED_TYPES;
+  if (typeof allowed !== "object" || allowed === null || Array.isArray(allowed)) {
+    throw new TypeError("allowedTypes must be a content-type allowlist.");
+  }
   const extensions = allowed[detectedContentType];
-  if (!extensions || !extensions.map(item => item.toLowerCase()).includes(extension)) {
+  if (!Array.isArray(extensions) ||
+      extensions.some(item => typeof item !== "string" || !/^\\.[a-z0-9]{1,10}$/i.test(item))) {
+    throw new TypeError("allowedTypes must contain valid filename extensions.");
+  }
+  if (!extensions.map(item => item.toLowerCase()).includes(extension)) {
     throw new TypeError("File type is not allowed or filename extension does not match content.");
   }
 
