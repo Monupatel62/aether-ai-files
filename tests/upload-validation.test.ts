@@ -22,6 +22,23 @@ describe("upload byte validation", () => {
     expect(() => validateUploadBytes("avatar.png", "image/png", png, { maxBytes: 4 })).toThrow("byte limit");
   });
 
+  it("detects JPEG, GIF, WebP, and PDF signatures", () => {
+    expect(detectKnownContentType(new Uint8Array([0xff, 0xd8, 0xff, 0x00]))).toBe("image/jpeg");
+    expect(detectKnownContentType(new Uint8Array([0x47, 0x49, 0x46, 0x38, 0x39, 0x61]))).toBe("image/gif");
+    expect(detectKnownContentType(new Uint8Array([0x52, 0x49, 0x46, 0x46, 0, 0, 0, 0, 0x57, 0x45, 0x42, 0x50]))).toBe("image/webp");
+    expect(detectKnownContentType(new TextEncoder().encode("%PDF-1.7"))).toBe("application/pdf");
+  });
+
+  it("allows MIME parameters but compares the normalized media type", () => {
+    expect(validateUploadBytes("avatar.png", "IMAGE/PNG; charset=binary", png).contentType).toBe("image/png");
+  });
+
+  it("rejects invalid MIME values and unsafe filename controls", () => {
+    expect(() => validateUploadBytes("avatar.png", "", png)).toThrow();
+    expect(() => validateUploadBytes("avatar\\u0000.png", "image/png", png)).toThrow("filename");
+    expect(() => validateUploadBytes(".hidden.png", "image/png", png)).toThrow("filename");
+  });
+
   it("supports explicit allowlists without allowing unknown signatures", () => {
     expect(() => validateUploadBytes("avatar.png", "image/png", png, { allowedTypes: { "image/jpeg": [".jpg"] } })).toThrow("not allowed");
   });
