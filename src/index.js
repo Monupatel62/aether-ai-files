@@ -64,7 +64,7 @@ export function createFileService({ authorize, storage, metadata, maxBytes = 10_
       if (!await authorized(principal, "file:read", file)) throw new FileLifecycleError("not_found", "File was not found");
       let content;
       try { content = bytesOf(await storage.get({ key: file.id })); } catch { content = null; }
-      if (!content || digest(content) !== file.sha256) throw new FileLifecycleError("content_integrity_failure", "File content could not be verified");
+      if (!content || content.byteLength !== file.sizeBytes || digest(content) !== file.sha256) throw new FileLifecycleError("content_integrity_failure", "File content could not be verified");
       return Object.freeze({ file: Object.freeze({ id: file.id, fileName: file.fileName, mediaType: file.mediaType, sizeBytes: file.sizeBytes, sha256: file.sha256 }), content: new Uint8Array(content) });
     },
 
