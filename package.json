@@ -1,0 +1,17 @@
+{
+  "name": "@aether-ai/files-contract",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Secure file metadata, upload validation, and lifecycle contracts",
+  "exports": {
+    ".": "./src/index.js"
+  },
+  "scripts": {
+    "test": "node --test",
+    "check": "node --check src/index.js && node --test"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
