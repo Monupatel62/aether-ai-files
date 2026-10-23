@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { detectKnownContentType, validateUploadBytes } from "../src/index.js";
+import { detectKnownContentType, validateUploadBytes, type UploadValidationOptions } from "../src/index.js";
 
 const png = new Uint8Array([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a, 0x00]);
 
@@ -41,5 +41,11 @@ describe("upload byte validation", () => {
 
   it("supports explicit allowlists without allowing unknown signatures", () => {
     expect(() => validateUploadBytes("avatar.png", "image/png", png, { allowedTypes: { "image/jpeg": [".jpg"] } })).toThrow("not allowed");
+  });
+
+  it("rejects malformed runtime MIME and allowlist inputs", () => {
+    expect(() => validateUploadBytes("avatar.png", null as unknown as string, png)).toThrow("content type is invalid");
+    expect(() => validateUploadBytes("avatar.png", "image/png", png, { allowedTypes: [] as unknown as UploadValidationOptions["allowedTypes"] })).toThrow("allowlist");
+    expect(() => validateUploadBytes("avatar.png", "image/png", png, { allowedTypes: { "image/png": ["../png"] } })).toThrow("valid filename extensions");
   });
 });
