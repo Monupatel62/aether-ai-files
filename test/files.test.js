@@ -61,3 +61,11 @@ test("marks file inaccessible before storage deletion and reports pending cleanu
   await assert.rejects(service.delete({ principal, fileId: file.id }), (e) => e.code === "deletion_pending");
   assert.equal(records.get(file.id).status, "deleted");
 });
+
+
+test("rejects content whose stored length disagrees with metadata", async () => {
+  const { service, records } = fixture();
+  const file = await service.upload({ principal, fileName: "note.txt", mediaType: "text/plain", content });
+  records.set(file.id, { ...records.get(file.id), sizeBytes: file.sizeBytes + 1 });
+  await assert.rejects(service.download({ principal, fileId: file.id }), (e) => e.code === "content_integrity_failure");
+});
