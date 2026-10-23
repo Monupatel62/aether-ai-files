@@ -78,8 +78,11 @@ export function validateUploadBytes(
     throw new TypeError("allowedTypes must be a content-type allowlist.");
   }
   const extensions = allowed[detectedContentType];
+  if (extensions === undefined) {
+    throw new TypeError("File type is not allowed or filename extension does not match content.");
+  }
   if (!Array.isArray(extensions) ||
-      extensions.some(item => typeof item !== "string" || !/^\\.[a-z0-9]{1,10}$/i.test(item))) {
+      extensions.some(item => typeof item !== "string" || !/^\.[a-z0-9]{1,10}$/i.test(item))) {
     throw new TypeError("allowedTypes must contain valid filename extensions.");
   }
   if (!extensions.map(item => item.toLowerCase()).includes(extension)) {
